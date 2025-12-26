@@ -23,34 +23,48 @@ const container = document.getElementById("chat_container");
 // 3. ENVOYER (Quand tu cliques)
 enter.addEventListener('click', function() {
     const messageInput = document.getElementById("enter_message");
+    const usernameInput = document.getElementById("username");
+
     if (messageInput.value.trim() !== "") {
-        push(messagesRef, { contenu: messageInput.value });
-        messageInput.value = "";
+        push(messagesRef, {
+            pseudo: usernameInput.value,
+            contenu: messageInput.value
+        });
+        messageInput.value = ""; 
     }
 });
 
 // 4. RECEVOIR (Pour tout le monde, en temps réel)
 onChildAdded(messagesRef, (data) => {
+    const messageData = data.val(); // On crée la variable messageData ici
     const textBox = document.createElement("div");
-    textBox.textContent = data.val().contenu;
-    textBox.className = "text_box";
-    onChildAdded(messagesRef, (data) => {
-    const textBox = document.createElement("div");
-    textBox.textContent = data.val().contenu;
+    
+    // Maintenant messageData.pseudo et messageData.contenu fonctionneront !
+    textBox.textContent = `${messageData.pseudo || "Anonyme"} : ${messageData.contenu}`;
     textBox.className = "text_box";
 
-    // --- REPOSE TES STYLES ICI ---
+    // --- AJOUT DES STYLES POUR LA BULLE ---
     textBox.style.backgroundColor = "lightblue";
     textBox.style.width = "200px";
     textBox.style.border = "1px solid black";
     textBox.style.borderRadius = "8px";
     textBox.style.padding = "10px";
     textBox.style.marginBottom = "10px";
-    textBox.style.wordWrap = "break-word"; // Pour tes retours à la ligne
-    textBox.style.whiteSpace = "normal";
-    // -----------------------------
+    textBox.style.wordWrap = "break-word"; // Pour éviter que le texte dépasse
+    textBox.style.whiteSpace = "normal";   // Pour permettre le retour à la ligne
+    // --------------------------------------
 
     container.prepend(textBox);
 });
-    container.prepend(textBox);
-});
+
+const inputUsername = document.getElementById("username");
+
+inputUsername.addEventListener("input", function() {
+
+if (inputUsername.value.trim() === "") {
+    inputUsername.style.backgroundColor = "red";
+}
+else {
+    inputUsername.style.backgroundColor = "green";
+}
+})
