@@ -64,3 +64,19 @@ body {
 #enter_message {
     border-radius: 8px;
 }
+#username {
+    border: 2px solid black;
+    border-radius: 8px;
+    height: 25px;
+    background-color: red;
+}
+#username_div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    position: absolute;
+    top: 25%;
+    left: 75%;
+    transform: translate(-75%);
+}
