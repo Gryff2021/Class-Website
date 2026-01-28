@@ -1,70 +1,107 @@
-// 1. Imports et Config
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+let name_1;
+let name_2;
+let combinaison;
+let combinaison_rv;
+let me_12;
+let me_22;
+let rng;
+let results_int = 0;
+const body = document.getElementsByTagName("body")[0].style;
+let message = document.getElementById("message");
+let dict = {
+    "test": 90
+}
+console.log(dict["test"]);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDosOnyimFQr3CGBE7tJuAt0nW0uSFJwvo",
-  authDomain: "realtimechat-51ad5.firebaseapp.com",
-  databaseURL: "https://realtimechat-51ad5-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "realtimechat-51ad5",
-  storageBucket: "realtimechat-51ad5.firebasestorage.app",
-  messagingSenderId: "81210677560",
-  appId: "1:81210677560:web:cbe2b70fb1db93839f09cd",
-  measurementId: "G-YLHHP0YW9X"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const messagesRef = ref(db, "messages");
+const check = document.getElementById("check");
+const results = document.getElementById("results");
 
-// 2. Éléments HTML
-const enter = document.getElementById("chat_enter");
-const container = document.getElementById("chat_container");
+function myLoop() {
+    setTimeout(function() {
+        if (results_int < rng) {
+            myLoop();
+            results_int += 1;
+            results.textContent = results_int;
+        }
 
-// 3. ENVOYER (Quand tu cliques)
-enter.addEventListener('click', function() {
-    const messageInput = document.getElementById("enter_message");
-    const usernameInput = document.getElementById("username");
+    }, 10)
+}
 
-    if (messageInput.value.trim() !== "") {
-        push(messagesRef, {
-            pseudo: usernameInput.value,
-            contenu: messageInput.value
-        });
-        messageInput.value = ""; 
+check.addEventListener("click", function() {
+    body.backgroundColor = "white";
+    name_1 = document.getElementById("name_1").value;
+    name_2 = document.getElementById("name_2").value;
+    me_12 = name_1.toLowerCase();
+    me_22 = name_2.toLowerCase();
+    combinaison = me_12 + me_22;
+    combinaison_rv = me_22 + me_12;
+    combinaison_rv = combinaison_rv.replaceAll(" ", "");
+    combinaison = combinaison.replaceAll(" ", "");
+
+
+    if (Object.keys(dict).includes(combinaison)) {
+        results.textContent = dict[combinaison];
+        rng = results.textContent;
     }
-});
+    if (Object.keys(dict).includes(combinaison_rv)) {
+        results.textContent = dict[combinaison_rv];
+        rng = results.textContent;
+    }
+    else {
+        results.textContent = 0;
+        results_int = 0;
+        rng = 0;
+        rng = Math.floor(Math.random() * (100 + 1));
+        console.log(rng);
+        myLoop();
+        dict[combinaison] = rng;
+        dict[combinaison_rv] = rng;
+        console.log(combinaison);
+        console.log(dict);
+    }
 
-// 4. RECEVOIR (Pour tout le monde, en temps réel)
-onChildAdded(messagesRef, (data) => {
-    const messageData = data.val(); // On crée la variable messageData ici
-    const textBox = document.createElement("div");
-    
-    // Maintenant messageData.pseudo et messageData.contenu fonctionneront !
-    textBox.textContent = `${messageData.pseudo || "Anonyme"} : ${messageData.contenu}`;
-    textBox.className = "text_box";
-
-    // --- AJOUT DES STYLES POUR LA BULLE ---
-    textBox.style.backgroundColor = "lightblue";
-    textBox.style.width = "200px";
-    textBox.style.border = "1px solid black";
-    textBox.style.borderRadius = "8px";
-    textBox.style.padding = "10px";
-    textBox.style.marginBottom = "10px";
-    textBox.style.wordWrap = "break-word"; // Pour éviter que le texte dépasse
-    textBox.style.whiteSpace = "normal";   // Pour permettre le retour à la ligne
-    // --------------------------------------
-
-    container.prepend(textBox);
-});
-
-const inputUsername = document.getElementById("username");
-
-inputUsername.addEventListener("input", function() {
-
-if (inputUsername.value.trim() === "") {
-    inputUsername.style.backgroundColor = "red";
-}
-else {
-    inputUsername.style.backgroundColor = "green";
-}
+    if (rng <= 9) {
+        body.backgroundColor = "red";
+        message.textContent = "Non, abandonnez 😑";
+    }
+    else if (rng <= 19) {
+        body.backgroundColor = "#ec2020";
+        message.textContent = "C'est pas une bonne idée 😐";
+    }
+    else if (rng <= 29) {
+        body.backgroundColor = "#ef283c";
+        message.textContent = "Bof 🤷‍♂️";
+    }
+    else if (rng <= 39) {
+        body.backgroundColor = "#e84364";
+        message.textContent = "Hum, à tenter 🫢";
+    }
+    else if (rng <= 49) {
+        body.backgroundColor = "#ee2b86";
+        message.textContent = "Ça peut marcher 😶";
+    }
+    else if (rng <= 59) {
+        body.backgroundColor = "#c970a8";
+        message.textContent = "Y a des chances 🙂";
+    }
+    else if (rng <= 69) {
+        body.backgroundColor = "#b85895";
+        message.textContent = "Autant essayer 😊";
+    }
+    else if (rng <= 79) {
+        body.backgroundColor = "#c3599c";
+        message.textContent = "Ce n'est plus qu'une question de temps 😀";
+    }
+    else if (rng <= 89) {
+        body.backgroundColor = "#f060bb";
+        message.textContent = "Cupidon est passé par là 💘";
+    }
+    else if (rng <= 99) {
+        body.backgroundColor = "#E843AC";
+        message.textContent = "L'amour fou 😍";
+    }
+    else if (rng == 100) {
+        body.backgroundColor = "#f423a8";
+        message.textContent = "À quand le mariage 👰";
+    }
 })
